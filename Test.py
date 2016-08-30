@@ -1,5 +1,4 @@
-import ControlSystems.py
-import Vehicle.py
+import Hardware.py
 import RPi.GPIO as GPIO
 import time
 
