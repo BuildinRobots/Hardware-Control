@@ -1,33 +1,44 @@
-from RPIO import PWM
+# Thomas Miles, 30/08/16
+# tmiles@student.unimelb.edu.au
+# 626263from RPIO import PWM
 
 class Servo:
         MIN = 1000
-        INIT = 2000 # initial frequency 2µs
         MAX = 3000
 
-        def __init__(self, pin, name):
-#======= *MIN & MAX may need adjusting, just guessed
-
+        def __init__(self, pin, name, init = 2000):
+            """ initialises servo """
 
             self.name = name
-            self.pulse = INIT
+            self.init = init
+            self.pulse = self.init
             self.pin = pin
             self.servo = PWM.Servo()
             self.servo.set_servo(self.pin, self.pulse)
 
             print self.name + "has been initialised"
 
-        def turn(self, step):
-        # +ve step turns clockwise, -ve counter-clockwise
-            if (self.pulse + step) >= MAX:
-                self.pulse = MIN
-                if self.pulse + step <= MAX:
-                    self.pulse = MIN
-            else:
-                self.pulse = self.pulse + step
 
-            self.output.set_servo(self.pin, self.pulse)
+        def reset(self):
+            """ resets servo to defult position """
+
+            self.pulse = self.init
+            print "--> "+ self.name + " has been reset"
+
+        def turn(self, step, extent):
+        # +ve step turns clockwise, -ve counter-clockwise
+        # extent is overall percent angle change (0.0 ~ 1.0)
+            i = 0
+            while i < extent*1000:
+                if (self.pulse + step) >= MAX:
+                    self.pulse = MIN
+                    if self.pulse + step <= MAX:
+                        self.pulse = MIN
+                    else:
+                        self.pulse = self.pulse + step
+
+                    self.output.set_servo(self.pin, self.pulse)
 
         def deactivate (self):
             self.servo.stop_servo(self.pin)
-            print self.name + "has been deactivated"
+            print "--> " + self.name + "has been deactivated"

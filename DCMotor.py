@@ -1,3 +1,6 @@
+# Thomas Miles, 30/08/16
+# tmiles@student.unimelb.edu.au
+# 626263
 from RPIO import PWM
 
 class DCMotor:
@@ -21,13 +24,13 @@ class DCMotor:
 
     print "--> " + name "enabled"
 
-    def accelerate(self, step=1, extent=100):
-        """ Increases or decreases speed based on step variable (defult 10) """
+    def accelerate(self, step, extent):
+        """ Increases or decreases speed based on step variable """
         # +ve step accelerates, -ve deccelerates
         i = 0
         while i < extent:
             self.setSpeed(self.pulse/HIGH + step)
-
+            i = i+1
 
     def setSpeed(self, speed):
 # Speed is a % between -100 (reverse) and 100
@@ -49,9 +52,10 @@ class DCMotor:
         """ Stops the motor """
         output.stop_servo(self.current)
         output.stop_servo(self.inactive)
-
+        print "--> " + self.name + "has been stopped"
 
     def forward(self, speed):
+        """ Drives motor in forward direction at speed between 0 and 20000 """
         self.pulse = speed
         self.current = self.fwd
         self.inactive = self.rev
@@ -60,6 +64,7 @@ class DCMotor:
 
 
     def reverse(self, speed):
+        """ Drives motor in forward direction at speed between 0 and 20000 """
         self.pulse = speed
         self.current = self.rev
         self.inactive = self.fwd

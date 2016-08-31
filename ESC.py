@@ -1,6 +1,7 @@
 # Thomas Miles, 30/08/16
 # tmiles@student.unimelb.edu.au
 # 626263
+
 from RPIO import PWM
 import time
 
@@ -62,22 +63,27 @@ class ESC:
 #==============================================================================#
 #                                  Methods
 #==============================================================================#
-    def accelerate(self, step=10):
-        """ Increases or decreases speed based on step variable (defult 10) """
+    def accelerate(self, step, extent):
+        """ Increases or decreases speed based on step variable  """
         # +ve step accelerates, -ve deccelerates
-        if (self.pulse + step) >= HIGH:
-            self.pulse = HIGH
-            if self.pulse + step <= LOW:
-                self.pulse = LOW
-            else:
-                self.pulse = self.pulse + step
+        # extent is percent speed change (0.0 ~ 1.0)
+        i = 0
+        while i < extent*500:
+            if (self.pulse + step) >= HIGH:
+                self.pulse = HIGH
+                if self.pulse + step <= LOW:
+                    self.pulse = LOW
+                else:
+                    self.pulse = self.pulse + step
 
-        self.output.set_servo(self.pin, self.pulse)
+            self.output.set_servo(self.pin, self.pulse)
+            i = i+1
 
 
 
     def stop(self):
-        """ Stops the motor """
+        """ Stops the motor.
+            NOTE if stopped for 2 sec the motor will be in reverse """
         self.pulse = NEUTURAL
         self.output.set_servo(self.pin, self.pulse)
 
@@ -94,3 +100,7 @@ class ESC:
         else:
             self.output.set_servo(self.pin, self.pulse)
             print "--> Speed set to "+ speed+"%"
+
+    def deactivate (self):
+        self.output.stop_servo(self.pin)
+        print "--> " + self.name + "has been deactivated"
