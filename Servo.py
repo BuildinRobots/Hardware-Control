@@ -1,6 +1,7 @@
 # Thomas Miles, 30/08/16
 # tmiles@student.unimelb.edu.au
-# 626263from RPIO import PWM
+# 626263
+from RPIO import PWM
 
 class Servo:
         MIN = 1000
