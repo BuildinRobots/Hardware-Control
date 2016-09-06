@@ -14,37 +14,38 @@ keypress = raw_input("--> Please ensure Alfie has been correctly wired!\n",
                      "    ESC           - GPIO 26\n",
                      "    Hit enter to confirm...")
 alfie = Alfie()
-
+SPEED = 50 # %
 start_time = time.time()
 
-print "--> Driving forward"
-alfie.drive_esc.accelerate(1, 0.25)
+print "--> 0-1: Driving forward"
+alfie.drive_esc.setSpeed(SPEED)
 time.sleep(0.5)
-print "--> Turning out of the gate"
-alfie.steering_servo.turn(-1, 0.5)
+print "--> 1-2: Turning out of the gate"
+alfie.steering_servo.setAngle(30)
 time.sleep(1)
-print "--> going straight again"
-alfie.steering_servo.turn(1, 0.5)
-print "--> turning to align with pipe, setting grabber to holding position"
+print "--> 2-3: going straight again"
+alfie.steering_servo.setAngle(0)
+print "--> 3-4: turning to align with pipe, setting grabber to holding position"
 alfie.arm_motor.setSpeed(100)
-alfie.steering_servo.turn(-2, 0.8)
+alfie.steering_servo.setAngle(30)
 time.sleep(0.1)
 alfie.arm_motor.stop()
-print "--> straightening up"
-alfie.steering_servo.turn(2, 0.8)
+print "--> 4-5: straightening up"
+alfie.steering_servo.setAngle(0)
 time.sleep(0.1)
-print "--> lifting over the bumps"
+print "--> 5: lifting over the bumps"
 alfie.lift()
-alfie.drive_esc.accelerate(1, 0.25)
+print "--> 5-6: driving over the pipe"
+alfie.drive_esc.setSpeed(SPEED/2)
 time.sleep(1)
-print "releasing from the beam"
-alfie.drive_esc.accelerate(-1, 0.25)
+print "--> 6: releasing"
+alfie.drive_esc.setSpeed(SPEED)
 alfie.release()
-print "turning towards finish zone"
-alfie.steering_servo.turn(1, 1)
+print "--> 6-7: turning towards finish zone"
+alfie.steering_servo.setAngle(-30)
 time.sleep(1)
-alfie.steering_servo.turn(-1, 1)
-print "hit the breaks"
+alfie.steering_servo.setAngle(0)
+print "7-8: hit the breaks!"
 alfie.drive_esc.setspeed(-50)
 time.sleep(1)
 
